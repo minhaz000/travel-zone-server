@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const Router = require('./routes/routes')
-const ApiRouter = require('./routes/API/movies')
+const ApiRouter = require('./routes/API/apiRoute')
 const DB = require('./connectDB')
 require('dotenv').config()
 require('colors')
