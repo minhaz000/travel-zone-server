@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongodb')
 const DB = require('../../connectDB')
 const flights = DB.client.db('travel-zone').collection('flights')
-const  timediff = require('timediff');
+
 exports.index = async (req,res)=>{ 
     let result = {
         "massage" : "welcome to taval-zone API. Here is the list of end point provide we provide" , 
@@ -16,49 +16,67 @@ exports.index = async (req,res)=>{
 }
 exports.show = async (req,res)=>{
     let filter = {}
+    let directResult = null
+    const timeCal = (departure, arrival)=>{
+        const   departureTime=  departure.split(' ')
+        const departureTimeHours = departureTime[1]==='pm' ?  JSON.parse(departureTime[0].split(':')[0])+12 : JSON.parse(departureTime[0].split(':')[0]) 
+        const departureTimeMinute = JSON.parse(departureTime[0].split(':')[1]) 
+        const departureTimeTotal =  departureTimeHours*60 + departureTimeMinute 
+        const  arrivalTime=  arrival.split(' ')
+        const arrivalTimeTimeHours = arrivalTime[1]==='pm' ?  JSON.parse(arrivalTime[0].split(':')[0])+12 : JSON.parse(arrivalTime[0].split(':')[0]) 
+        const arrivalTimeMinute = JSON.parse(arrivalTime[0].split(':')[1]) 
+        const arrivalTimeTotal =  arrivalTimeTimeHours*60 + arrivalTimeMinute
+
+       return arrivalTimeTotal-departureTimeTotal
+  
+}
  
     req.query.return==1 ? filter['return'] = true : null 
     req.query.destination ? filter['destination'] = req.query.destination : null 
     req.query.airlines_name ? filter['airlines_name'] = req.query.airlines_name : null 
    
    if( req.query.cheapest==1){ 
-    let totalPrice = 0
-    const price = await flights.find({}).toArray()
-     price.map(item =>{  totalPrice = totalPrice+item.price } ) 
-    const average = totalPrice/price.length 
-     console.log( totalPrice, average)
-     filter['price'] = { $lt: average }
+                    let totalPrice = 0
+                    const price = await flights.find({}).toArray()
+                    price.map(item =>{  totalPrice = totalPrice+item.price } ) 
+                    const average = totalPrice/price.length 
+                    filter['price'] = { $lt: average }
     }
     if(req.query.best==1){ 
-    let totalPrice = 0
-    const price = await flights.find({}).toArray()
-     price.map(item =>{  totalPrice = totalPrice+item.price } ) 
-    const average = totalPrice/price.length 
-     console.log( totalPrice, average)
-     filter['price'] = { $gt: average }
+                    let totalPrice = 0
+                    const price = await flights.find({}).toArray()
+                    price.map(item =>{  totalPrice = totalPrice+item.price } ) 
+                    const average = totalPrice/price.length 
+                    filter['price'] = { $gt: average }
     }
+    
 
     if(req.query.quickest==1) {
-        let totalTime =0  
-        const time = await flights.find({}).toArray()
-        const getDifference = (data)=>{
-            const  time1 =  data.slite(' ')
-            new Date(2015, 1, 1), new Date(`2018-05-02 ${time1[0]}`)
-            // const formatedTime1 = time1.
-            if(time1[1]=='pm'){  }
-            const  time2 =  data1.slite(' ')
+                    let totalTripTime =0  
+                    const time = await flights.find({}).toArray()
+                
+                  
+                    time.map(item=> {
+                       const tripTime =  timeCal(item.time.departure,item.time.arrival)
+                       totalTripTime = totalTripTime+tripTime
 
-        }
-        time.map(item =>{ 
+                       console.log("time:", tripTime, "ID:" ,item._id )
+                            
+                    })
+                    const averageTripTime = totalTripTime/time.length
+                    
+                    directResult =  time.filter((time)=> {
+                    const tripTime =  timeCal(time.time.departure,time.time.arrival)
+                    return tripTime < averageTripTime
+                })
+               
+                
 
-          console.log( item.time.departure.split(' ')[0]  )
-          console.log( item.time.arrival )
-            
-        })
-    } 
+        
+    }
 
-    const result = await flights.find(filter, { sort: { _id:-1 }}).toArray()
-    res.send( result )
+    const result = directResult||await flights.find(filter, { sort: { _id:-1 }}).toArray()
+   res.send( result ) 
     
 }
 exports.search = async (req,res)=>{
