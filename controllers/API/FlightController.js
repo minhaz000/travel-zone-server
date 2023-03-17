@@ -57,7 +57,6 @@ exports.show = async (req,res)=>{
     const init =  throttle( updateInfo );init()
     let filter = []
     let pageConfig = {content:20 , page:1}
-    let directResult = null
 
  
     req.query.return==1?filter.push({return:true}):req.query.return==0?filter.push({return:false}):null
@@ -69,7 +68,7 @@ exports.show = async (req,res)=>{
                         const price = JSON.parse(req.query.price)
                 price.min?filter.push({'price': {$gt:price.min}}) :null
                 price.max?filter.push({'price': {$lt:price.max}}) :null
-                 console.log(price)
+                
     }
     if(req.query.pageConfig){ 
                               const Config = JSON.parse(req.query.pageConfig)
@@ -97,24 +96,19 @@ exports.show = async (req,res)=>{
                     let totalTripTime=0 
                     Information.map(item=> {
                        totalTripTime = totalTripTime+item.time.trip
-                       console.log( item.time.trip)                            
+                                                  
                     })
                     const averageTripTime = totalTripTime/Information.length
                     filter.push({'time.trip':{ $lt: averageTripTime}})
-                console.log( averageTripTime)
     }
     
-    console.log( filter) 
-    // const result = directResult||await flights.find({$and:[{"airlines_name":'Flydubai'}] }, { sort: { _id:-1 }}).limit(pageConfig.content).skip(pageConfig.content*pageConfig.page-1).toArray()
-    const result = directResult||await flights.find({$and:filter}, { sort: { _id:-1 }}).limit(pageConfig.content).skip(pageConfig.content*(pageConfig.page-1)).toArray()
- 
-   console.log( result.length ) 
+   
+   const result = await flights.find(Object.keys(filter).length===0?{}:{$and:filter}, { sort: { _id:-1 }}).limit(pageConfig.content).skip(pageConfig.content*(pageConfig.page-1)).toArray() 
    const response = {
                     massage:"this is the 20 flights ",
                     page:pageConfig.page,
                     data:result        
                     }
    res.send( response ) 
-    
 }
 
