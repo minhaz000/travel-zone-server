@@ -15,39 +15,44 @@ const Genarator=(limit=1)=>{
     // location
     f3 : ['Dhaka - Karachi','Lahore - Karachi','Lahore - Dubai','Dhaka - Dubai' , 'Lahore - Dhaka', 'Dhaka - Japan'],
     // airlines_logo_URL
-    f4 :['./img/Qatar.jpg','./img/emirates.png','./img/FlyDubai-Logo.png','./img/qantas.png' , './img/japanairline.png'],
+    f4 :['https://i.ibb.co/nwLnwMQ/Qatar.jpg','https://i.ibb.co/C7xkd3Z/emirates.png','https://i.ibb.co/GcHPnfY/Fly-Dubai-Logo.png','https://i.ibb.co/vj72XDr/qantas.png' , 'https://i.ibb.co/MS750JV/japanairline.png'],
     // airlines_name
     f5 : ["Qatar Airways", "Emirates" ,"Flydubai","Qantas","Japan Airline"],
     // Hero_URL
-    f6:['https://drive.google.com/file/d/1viS7s3_8si9hohIr1KJPqTwWL0l4jwa0/view?usp=share_link'],
+    f6:['https://i.ibb.co/BsyDKJL/Rectangle-3-1.png'],
     // economy_URL
     f7:[
-      "https://drive.google.com/file/d/1T_8Pq9ozpOzKIcT0ifh2ohKJqH-BD-bk/view?usp=share_link",
-      "https://drive.google.com/file/d/1McR0-t0Plo_QrURzk_9CqU4s2RuLK15x/view?usp=share_link",
-      "https://drive.google.com/file/d/16e__fsk3g8dwzGj_5l9pl7uhQ2dmAm2M/view?usp=share_link",
-      "https://drive.google.com/file/d/198TCh7MdMXFBs2zG14YD_pJyFO3wBoC7/view?usp=share_link",
-      "https://drive.google.com/file/d/1f2qtuBZ7yA0rHuXoLWYPco_r6NY90Md_/view?usp=share_link",
-      "https://drive.google.com/file/d/192slrSKT2krw-raOAtw4H6km2fCGbg9s/view?usp=share_link"
-    ] ,
+  "https://i.ibb.co/vmdMD3N/Frame-189.png",
+  "https://i.ibb.co/6R4C2yP/Frame-186.png",
+  "https://i.ibb.co/5kgphhV/Frame-185.png",
+  "https://i.ibb.co/qxs0gMt/Frame-184.png",
+  "https://i.ibb.co/0CvkxrB/Frame-183.png",
+  "https://i.ibb.co/KWLpkXM/Frame-142.png",
+   ] ,
     // ratings
     f8:[4.5,4.9,3.5,4.3,4.7],
     // price
     f9:[340,450,560,70,200,140,390,400,265,57],
     // time
     f10:[
-      { "departure":"10:30 am" , "arrival": "12:45 am" },
-      { "departure":"10:00 am" , "arrival": "1:00 pm" },
-      { "departure":"10:50 am" , "arrival": "11:30 am" },
-      { "departure":"9:40 am" , "arrival": "11:45 am" },
-      { "departure":"10:30 am" , "arrival": "11:00 am" },
+      { "departure":"10:30 am" , "arrival": "12:45 am","date":"2023-03-01" },
+      { "departure":"10:00 am" , "arrival": "1:00 pm" ,"date":"2023-03-05"},
+      { "departure":"10:50 am" , "arrival": "11:30 am","date":"2023-03-11" },
+      { "departure":"9:40 am" , "arrival": "11:45 am" ,"date":"2023-03-15" },
+      { "departure":"10:30 am" , "arrival": "11:00 am","date":"2023-03-20" },
+      { "departure":"10:30 am" , "arrival": "11:00 am","date":"2023-03-25" },
+      { "departure":"10:30 am" , "arrival": "11:00 am","date":"2023-03-31" },
     ],
+
     // return_time
     f11:[
-      { "departure":"10:30 am" , "arrival": "12:45 am" },
-      { "departure":"10:00 am" , "arrival": "1:00 pm" },
-      { "departure":"10:50 am" , "arrival": "11:30 am" },
-      { "departure":"9:40 am" , "arrival": "11:45 am" },
-      { "departure":"10:30 am" , "arrival": "11:00 am" },
+      { "departure":"10:30 am" , "arrival": "12:45 am","date":"2023-03-03" },
+      { "departure":"10:00 am" , "arrival": "1:00 pm","date":"2023-03-05" },
+      { "departure":"10:50 am" , "arrival": "11:30 am","date":"2023-03-16" },
+      { "departure":"9:40 am" , "arrival": "11:45 am" ,"date":"2023-03-18"},
+      { "departure":"10:30 am" , "arrival": "11:00 am","date":"2023-03-22" },
+      { "departure":"10:30 am" , "arrival": "11:00 am","date":"2023-03-24" },
+      { "departure":"10:30 am" , "arrival": "11:00 am","date":"2023-03-31" },
     ],
     // return
     f12 : [true , false],
@@ -92,9 +97,9 @@ const Genarator=(limit=1)=>{
   return generated
 }
 
-const result = JSON.stringify( Genarator(300))
+const result = JSON.stringify( Genarator(80))
 
-console.log( result )
+
 
 
 fs.writeFile('./genarator.json', result, (err)=>{

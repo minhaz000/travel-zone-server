@@ -37,12 +37,15 @@ const router = express.Router();
   * @apiParam  {String }      [destination=Gümüssuyu Mah. Inönü Cad. No:8, Istanbul 34437]     Get the flight by destination name 
   * @apiParam  {String }      [location=Lahore - Dubai]     Get the flight by location name 
   * @apiParam  {String }      [airlines_name=flydubai]  Get the flight by airlines name
+  * @apiParam  {String }      [timeDate=2023-03-18]  Get the flight by airlines name
+  * @apiParam  {String }      [returnDate=2023-03-18]  Get the flight by airlines name
   *
   * @apiSuccess {Object[]} all the flights.
   *
   * @apiError (Unauthorized 404) Can't get flights 
   */
  router.get('/flights',FlightController.show)
+ router.get('/flights-delete-all',FlightController.delete)
 
-
+ router.get('/flights/:ID',FlightController.showByID)
 module.exports= router

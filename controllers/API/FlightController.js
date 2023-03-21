@@ -63,9 +63,11 @@ exports.show = async (req,res)=>{
     req.query.destination ? filter.push({'destination':req.query.destination}) : null 
     req.query.location ? filter.push({'location':req.query.location}) : null 
     req.query.airlines_name ? filter.push({'airlines_name':req.query.airlines_name}) : null 
+    req.query.timeDate? filter.push({'time.date':req.query.timeDate}):null
+    req.query.returnDate? filter.push({'return_time.date':req.query.returnDate}):null
     req.query.page ? pageConfig['page'] = req.query.page :null
     if(req.query.price){
-                        const price = JSON.parse(req.query.price)
+                const price = JSON.parse(req.query.price)
                 price.min?filter.push({'price': {$gt:price.min}}) :null
                 price.max?filter.push({'price': {$lt:price.max}}) :null
                 
@@ -91,6 +93,7 @@ exports.show = async (req,res)=>{
                     filter.push({price:{ $gt: average }})     
     }
     
+    
 
     if(req.query.quickest==1) {
                     let totalTripTime=0 
@@ -111,4 +114,28 @@ exports.show = async (req,res)=>{
                     }
    res.send( response ) 
 }
+exports.showByID = async(req,res,next)=>{
+try {
+    const ID = req.params.ID
+    const result = await flights.find({'_id':new ObjectId(ID)}).toArray()
+    const response = {
+        massage:'flight get by ID',
+        data:result        
+        }
+    res.send(response)
+}
+catch(err){
+    console.log(err); 
+    const response = {
+        massage:err.message,
+        data:[{}]        
+        }
+     res.send()
+}
 
+}
+exports.delete= async (req,res,next)=>{
+    console.log( "fuckeup database")
+    const result = await flights.deleteMany({})
+    res.send(result)
+}
